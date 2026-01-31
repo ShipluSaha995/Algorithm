@@ -1,3 +1,3 @@
 # Algorithm-Java
 
-My algorithm lraning Journey
+My algorithm learning Journey

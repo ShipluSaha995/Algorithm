@@ -36,7 +36,7 @@ There are two ways to create a graph
 
 //Graph with Adjacency Matrix:
 
-import java.util.*;
+/*import java.util.*;
 class CreateGraph{
     int V;
     int[][] arr;
@@ -82,4 +82,8 @@ public class Graph{
         g.print();
     }
 }
+*/
+
+// Graph with adjacency list 
+
 
