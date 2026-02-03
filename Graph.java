@@ -156,7 +156,7 @@ public class Graph{
  // 1. Undirected Graph: An undirected graph is a graph where edges have no directions.
  
  //code :
-
+/* 
  import java.util.*;
 
  class Graphlist{
@@ -212,4 +212,63 @@ public class Graph{
         g.print();
 
     }
- }
+ }*/
+
+
+// Directed Graph: A directed graph is a graph where edges have directions 
+
+// code: 
+
+import java.util.*;
+
+class Glist{
+    int V;
+    ArrayList<ArrayList<Integer>>adj;
+
+    Glist(int V){
+        this.V=V;
+        adj=new ArrayList<>();
+
+        for(int i=0; i<V; i++){
+            adj.add(new ArrayList<>());
+        }
+    }
+
+    void addEdge(int u, int v){
+        if(u<0||v<0||u>=V||u>=V){
+            return;
+        }
+
+        adj.get(u).add(v);
+    }
+
+    void print(){
+        for(int i=0; i<V; i++){
+            System.out.print(i+"->");
+            for(int node:adj.get(i)){
+                System.out.print(node+" ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+public class Graph{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int V = sc.nextInt();
+        int E = sc.nextInt();
+
+        Glist g = new Glist(V);
+
+        for(int i=0; i<E; i++){
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+
+            g.addEdge(u, v);
+        }
+
+        g.print();
+    }
+}
