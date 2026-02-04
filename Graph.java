@@ -218,7 +218,7 @@ public class Graph{
 // Directed Graph: A directed graph is a graph where edges have directions 
 
 // code: 
-
+/* 
 import java.util.*;
 
 class Glist{
@@ -270,5 +270,74 @@ public class Graph{
         }
 
         g.print();
+        sc.close();
+    }
+}*/
+
+// Weighted Graph: A graph is known as weighted graph if a weight is assosiated with each edge.
+
+import java.util.*;
+
+class Edge{
+    int to, weight;
+
+    Edge(int to, int weight){
+        this.to=to;
+        this.weight=weight;
+    }
+}
+
+class Weight{
+    int V;
+    ArrayList<ArrayList<Edge>> adj;
+    
+    Weight(int V){
+        this.V = V;
+        adj = new ArrayList<>();
+        
+        for(int i = 0; i < V; i++){
+            adj.add(new ArrayList<>());
+        }
+    }
+
+    void addEdge(int u, int v, int w){
+        if(u<0||v<0||u>=V||v>=V){
+            return;
+        }
+
+        adj.get(u).add(new Edge(v, w));
+    }
+
+    void print(){
+        for(int i=0; i<V; i++){
+            System.out.print(i+"->");
+            for(Edge e:adj.get(i)){
+                System.out.print("("+e.to+","+e.weight+")");
+            }
+            System.out.println();
+        }
+    }
+}
+
+public class Graph{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int V = sc.nextInt();
+        int E = sc.nextInt();
+
+        Weight we = new Weight(V);
+
+        for(int i=0; i<E; i++){
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            int w = sc.nextInt();
+
+            we.addEdge(u,v,w);
+        }
+
+        we.print();
+        sc.close();
+
     }
 }
