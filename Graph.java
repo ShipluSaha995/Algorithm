@@ -276,7 +276,7 @@ public class Graph{
 
 // Weighted Graph: A graph is known as weighted graph if a weight is assosiated with each edge.
 
-import java.util.*;
+/*import java.util.*;
 
 class Edge{
     int to, weight;
@@ -340,4 +340,6 @@ public class Graph{
         sc.close();
 
     }
-}
+}*/
+
+
