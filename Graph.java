@@ -343,3 +343,56 @@ public class Graph{
 }*/
 
 
+// Complete Graph: Complete graph in which every vertex is directly connected to evry other vertex.
+/*
+key point :
+1. It has the maximum number of edges.
+2. For undirected graph wtih n vertices, the maximum number of edges is n(n-1)/2.
+3. For the direcrted graph with n vertices, the maximum number of edges is n(n-1).
+
+*/
+
+import java.util.*;
+class CGraph{
+    int V;
+    ArrayList<ArrayList<Integer>>adj;
+
+    CGraph(int V){
+        this.V=V;
+        adj=new ArrayList<>();
+
+        for(int i=0; i<V; i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i=0; i<V; i++){
+            for(int j=0; j<V; j++){
+                if(i!=j){
+                    adj.get(i).add(j);
+                }
+            }
+        }
+    }
+
+    void print(){
+        for(int i=0; i<V; i++){
+            System.out.print(i+"-> ");
+            for(int node:adj.get(i)){
+                System.out.print(node+" ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+public class Graph{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int V = sc.nextInt();
+
+        CGraph g = new CGraph(V);
+
+        g.print();
+        sc.close();
+    }
+}
