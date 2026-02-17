@@ -1,3 +1,3 @@
-# Algorithm-Java
+# Algorithm
 
 My algorithm learning Journey
