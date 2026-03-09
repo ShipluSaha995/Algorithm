@@ -142,7 +142,7 @@ int main(){
 
 //dfs
 
-#include <bits/stdc++.h>
+/*#include <bits/stdc++.h>
 using namespace std;
 
 class Graph{
@@ -198,4 +198,149 @@ int main(){
 
     g.DFS(start);
     return 0;
+}*/
+
+//Topological sort
+
+/*#include <bits/stdc++.h>
+using namespace std;
+
+class Graph{
+    int V;
+    vector<vector<int>>adj;
+public:
+    Graph(int v){
+        V=v;
+        adj.resize(V);
+    }
+    void addEdge(int u, int v){
+        adj[u].push_back(v);
+    }
+
+    void dfs(int v, vector<bool>& visited, stack<int> &st){
+        visited[v]=true;
+        for(int u:adj[v]){
+            if(!visited[u]){
+                dfs(u, visited, st);
+            }
+        }
+        st.push(v);
+    }
+
+    void topology(){
+        vector<bool>visited(V, false);
+        stack<int>st;
+
+        for(int i=0; i<V; i++){
+            if(!visited[i]){
+                dfs(i, visited, st);
+            }
+        }
+
+        while(!st.empty()){
+            cout<<st.top()<<" ";
+            st.pop();
+        }
+        cout<<"\n";
+    }
+};
+
+int main(){
+    int V, E;
+    cin>>V>>E;
+    Graph g(V);
+
+    for(int i=0; i<E; i++){
+        int  u, v;
+        cin>>u>>v;
+        g.addEdge(u, v);
+    }
+    g.topology();
+    return 0;
+}
+
+
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Graph{
+    int V;
+    vector<vector<int>> adj;
+
+public:
+    Graph(int v){
+        V=v;
+        adj.resize(V);
+    }
+    void addEdge(int u, int v){
+        adj[u].push_back(v);
+    }
+
+    void dfs1(int v, vector<bool> & visited, stack<int>st){
+        visited[v]=true;
+        for(int u:adj[v]){
+            if(!visited[u]){
+                dfs1(u, visited, st);
+            }
+        }
+        st.push(v);
+    }
+
+    void dfs2(int v, vector<bool>& visited, vector<vector<int>>& transpose){
+        cout<<v<<" ";
+        visited[v]=true;
+        for(int u:transpose[v]){
+            if(!visited[u]){
+                dfs2(u, visited,transpose);
+            }
+        }
+    }
+
+    void scc(){
+        stack<int>st;
+        vector<bool>visited(V, false);
+
+        for(int i=0; i<V; i++){
+            if(!visited[i]){
+                dfs1(i, visited, st);
+            }
+        }
+
+        vector<vector<int>> transpose(V);
+
+        for(int i=0; i<V; i++){
+            for(int j: adj[i]){
+                transpose[j].push_back(i);
+            }
+        }
+
+        fill(visited.begin(), visited.end(), false);
+
+        while(!st.empty()){
+            int v= st.top();
+            st.pop();
+
+            if(!visited[v]){
+                dfs2(v, visited, transpose);
+                cout<<"\n";
+            }
+        }
+    }
+};
+
+
+int main(){
+    int V, E;
+
+    cin>>V>>E;
+
+    Graph g(V);
+    for(int i=0; i<E; i++){
+        int u, v;
+        cin>>u>>v;
+        g.addEdge(u,v);
+    }
+    g.scc();
 }
