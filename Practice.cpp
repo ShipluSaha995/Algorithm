@@ -262,7 +262,7 @@ int main(){
 
 */
 
-#include <bits/stdc++.h>
+/*#include <bits/stdc++.h>
 using namespace std;
 
 class Graph{
@@ -343,4 +343,186 @@ int main(){
         g.addEdge(u,v);
     }
     g.scc();
+}*/
+
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// class Graph {
+// private:
+//     int V;
+//     vector<vector<int>> graph;
+
+// public:
+//     Graph(int v) {
+//         V = v;
+//         graph.resize(V, vector<int>(V));
+//     }
+
+//     void inputGraph() {
+//         cout << "matrix:\n";
+//         for (int i = 0; i < V; i++)
+//             for (int j = 0; j < V; j++)
+//                 cin >> graph[i][j];
+//     }
+
+//     int primMST(int skipU = -1, int skipV = -1) {
+//         vector<bool> selected(V, false);
+//         selected[0] = true;
+
+//         int edges = 0;
+//         int totalWeight = 0;
+
+//         while (edges < V - 1) {
+//             int minWeight = INT_MAX;
+//             int x = -1, y = -1;
+
+//             for (int i = 0; i < V; i++) {
+//                 if (selected[i]) {
+//                     for (int j = 0; j < V; j++) {
+//                         if (!selected[j] && graph[i][j] != 0) {
+
+//                             if ((i == skipU && j == skipV) || (i == skipV && j == skipU))
+//                                 continue;
+
+//                             if (graph[i][j] < minWeight) {
+//                                 minWeight = graph[i][j];
+//                                 x = i;
+//                                 y = j;
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+
+//             if (x == -1 || y == -1)
+//                 return INT_MAX;
+
+//             selected[y] = true;
+//             totalWeight += graph[x][y];
+//             edges++;
+//         }
+
+//         return totalWeight;
+//     }
+
+//     void findSecondBestMST() {
+//         int mstWeight = primMST();
+//         int secondBest = INT_MAX;
+
+//         for (int i = 0; i < V; i++) {
+//             for (int j = i + 1; j < V; j++) {
+
+//                 if (graph[i][j] != 0) {
+//                     int weight = primMST(i, j);
+
+//                     if (weight > mstWeight && weight < secondBest)
+//                         secondBest = weight;
+//                 }
+//             }
+//         }
+
+//         cout << "MST Weight: " << mstWeight << endl;
+//         cout << "Second Best MST Weight: " << secondBest << endl;
+//     }
+// };
+
+// int main() {
+//     int V;
+
+//     cout << "vertices: ";
+//     cin >> V;
+
+//     Graph g(V);
+//     g.inputGraph();
+//     g.findSecondBestMST();
+
+//     return 0;
+// }
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Graph {
+private:
+    struct Edge {
+        int u, v, w;
+    };
+
+    int V, E;
+    vector<Edge> edges;
+    vector<int> parent;
+
+public:
+    Graph(int V, int E) {
+        this->V = V;
+        this->E = E;
+        parent.resize(V);
+
+        for(int i = 0; i < V; i++)
+            parent[i] = i;
+    }
+
+    void addEdge(int u, int v, int w) {
+        edges.push_back({u, v, w});
+    }
+
+    int find(int x) {
+        if(parent[x] == x)
+            return x;
+        return parent[x] = find(parent[x]);
+    }
+
+    void unite(int a, int b) {
+        parent[find(a)] = find(b);
+    }
+
+    static bool compareEdge(Edge a, Edge b) {
+        return a.w < b.w;
+    }
+
+    void KruskalMST() {
+        sort(edges.begin(), edges.end(), compareEdge);
+
+        int totalWeight = 0;
+        cout << "\nEdges in MST:\n";
+
+        for(auto &e : edges) {
+            int u = find(e.u);
+            int v = find(e.v);
+
+            if(u != v) {
+                unite(u, v);
+                cout << e.u << " - " << e.v << " : " << e.w << endl;
+                totalWeight += e.w;
+            }
+        }
+
+        cout << "Total MST Weight = " << totalWeight << endl;
+    }
+};
+
+int main(){
+
+    int V, E;
+
+    cout << "vertices: ";
+    cin >> V;
+
+    cout << "edges: ";
+    cin >> E;
+
+    Graph g(V, E);
+
+    cout << "edges:\n";
+
+    for(int i = 0; i < E; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        g.addEdge(u, v, w);
+    }
+
+    g.KruskalMST();
+
+    return 0;
 }
