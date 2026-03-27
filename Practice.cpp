@@ -440,7 +440,7 @@ int main(){
 //     return 0;
 // }
 
-#include <bits/stdc++.h>
+/*#include <bits/stdc++.h>
 using namespace std;
 
 class Graph {
@@ -524,5 +524,51 @@ int main(){
 
     g.KruskalMST();
 
+    return 0;
+}*/
+
+
+//topological sort
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void dfs(int node, vector<vector<int>> &adj, vector<bool>&visited, stack<int>&st){
+    visited[node]=true;
+    for(int neighbor:adj[node]){
+        if(!visited[neighbor]){
+            dfs(neighbor, adj, visited, st);
+        }
+    }
+
+    st.push(node);
+}
+
+void topology(int V, vector<vector<int>>&adj){
+    vector<bool>visited(V, false);
+    stack<int>st;
+
+    for(int i=0; i<V; i++){
+        if(!visited[i]){
+            dfs(i, adj, visited, st);
+        }
+    }
+    while(!st.empty()){
+        cout<<st.top()<<" ";
+        st.pop();
+    }
+}
+
+int main(){
+    int V, E;
+    cin>>V>>E;
+
+    vector<vector<int>>adj(V);
+    for(int i=0; i<E; i++){
+        int u, v ;
+        cin>>u>>v;
+        adj[u].push_back(v);
+    }
+    topology(V, adj);
     return 0;
 }
