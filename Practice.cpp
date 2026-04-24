@@ -654,128 +654,180 @@
 //     return 0;
 // }
 
+// #include <bits/stdc++.h>
+// using namespace std;
+
+// struct Edge{
+//     int u ,v , weight;
+// };
+
+// vector<int>parent,rnk;
+
+// int findparent(int x){
+//     if(parent[x]!=x){
+//         parent[x]=findparent(parent[x]);
+//     }
+//     return parent[x];
+// }
+
+// void unionset(int a , int b){
+//     int rootA=findparent(a);
+//     int rootB=findparent(b);
+
+//     if(rootA!=rootB){
+//         if(rnk[rootA]<rnk[rootB]){
+//             parent[rootA]=rootB;
+//         }
+//         else if(rnk[rootA]>rnk[rootB]){
+//             parent[rootA]=rootB;
+//         }
+//         else{
+//             parent[rootA]=rootB;
+//             rnk[rootA]++;
+//         }
+//     }
+// }
+
+// bool compare(Edge a , Edge b){
+//     return a.weight<b.weight;
+// }
+
+
+// int dfs(int src, int dest, int parentNode, vector<vector<pair<int,int>>>&adj, int maxEdge){
+//     if(src==dest){
+//         return 1;
+//     }
+//     for(auto it:adj[src]){
+//         int next=it.first;
+//         int weight=it.second;
+
+//         if(next==parentNode){
+//             continue;
+//         }
+
+//         if(dfs(next, dest, src, adj,maxEdge)){
+//             maxEdge=max(maxEdge, weight);
+//             return 1;
+//         }
+//     }
+//     return 0;
+// }
+
+
+
+// int main(){
+//     int V,E;
+//     cin>>V>>E;
+
+//     vector<Edge>edge(E);
+//     for(int i=0; i<E; i++){
+//         cin>>edge[i].u>>edge[i].v>>edge[i].weight;
+//     }
+
+//     parent.resize(V);
+//     parent.resize(V,0);
+//     for(int i=0;i<E; i++){
+//         parent[i]=1;
+//     }
+//     sort(edge.begin(),edge.end(),compare);
+//     vector<Edge>mst;
+//     vector<bool>used(E, false);
+
+//     int totalcost=0;
+
+//     for(int i=0; i<E; i++){
+//         int u=edge[i].u;
+//         int v=edge[i].v;
+
+//         if(findparent(u)!=findparent(v)){
+//             unionset(u,v);
+//             mst.push_back(edge[i]);
+//             used[i]=true;
+//             totalcost+=edge[i].weight;
+//         }
+//     }
+
+//     vector<vector<pair<int,int>>> adj(V);
+//     for(auto e: mst){
+//         adj[e.u].push_back({e.v, e.weight});
+//         adj[e.v].push_back({e.u, e.weight});
+//     }
+//     int secondbest=INT_MAX;
+
+//     for(int i=0; i<E; i++){
+//         if(used[i]){
+//             continue;
+//         }
+//         int maxEdge=-1;
+//         dfs(edge[i].u, edge[i].v,-1,adj,maxEdge);
+//         int newcost=totalcost+edge[i].weight-maxEdge;
+//         if(newcost>totalcost){
+//             secondbest=min(secondbest,newcost);
+//         }
+//     }
+
+//     cout<<totalcost<<"\n";
+//     if(secondbest==INT_MAX){
+//         cout<<"no\n";
+
+//     }
+//     else{
+//         cout<<secondbest<<"\n";
+//     }
+
+//     return 0;
+    
+
+// }
+
+
 #include <bits/stdc++.h>
 using namespace std;
-
-struct Edge{
-    int u ,v , weight;
-};
-
-vector<int>parent,rnk;
-
-int findparent(int x){
-    if(parent[x]!=x){
-        parent[x]=findparent(parent[x]);
-    }
-    return parent[x];
-}
-
-void unionset(int a , int b){
-    int rootA=findparent(a);
-    int rootB=findparent(b);
-
-    if(rootA!=rootB){
-        if(rnk[rootA]<rnk[rootB]){
-            parent[rootA]=rootB;
-        }
-        else if(rnk[rootA]>rnk[rootB]){
-            parent[rootA]=rootB;
-        }
-        else{
-            parent[rootA]=rootB;
-            rnk[rootA]++;
-        }
-    }
-}
-
-bool compare(Edge a , Edge b){
-    return a.weight<b.weight;
-}
-
-
-int dfs(int src, int dest, int parentNode, vector<vector<pair<int,int>>>&adj, int maxEdge){
-    if(src==dest){
-        return 1;
-    }
-    for(auto it:adj[src]){
-        int next=it.first;
-        int weight=it.second;
-
-        if(next==parentNode){
-            continue;
-        }
-
-        if(dfs(next, dest, src, adj,maxEdge)){
-            maxEdge=max(maxEdge, weight);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-
 
 int main(){
     int V,E;
     cin>>V>>E;
 
-    vector<Edge>edge(E);
+    vector<pair<int,int>>adj[V];
     for(int i=0; i<E; i++){
-        cin>>edge[i].u>>edge[i].v>>edge[i].weight;
+        int u,v,w;
+        cin>>u>>v>>w;
+
+        adj[i].push_back({v,w});
+        adj[i].push_back({u,w});
     }
 
-    parent.resize(V);
-    parent.resize(V,0);
-    for(int i=0;i<E; i++){
-        parent[i]=1;
-    }
-    sort(edge.begin(),edge.end(),compare);
-    vector<Edge>mst;
-    vector<bool>used(E, false);
+    vector<bool>visited(V,false);
+
+    priority_queue<tuple<int,int,int>,vector<tuple<int,int,int>>>pq;
+    pq.push({0,0,-1});
 
     int totalcost=0;
 
-    for(int i=0; i<E; i++){
-        int u=edge[i].u;
-        int v=edge[i].v;
+    while(!pq.empty()){
+        auto[weight,node,parent]=pq.top();
+        pq.pop();
 
-        if(findparent(u)!=findparent(v)){
-            unionset(u,v);
-            mst.push_back(edge[i]);
-            used[i]=true;
-            totalcost+=edge[i].weight;
-        }
-    }
-
-    vector<vector<pair<int,int>>> adj(V);
-    for(auto e: mst){
-        adj[e.u].push_back({e.v, e.weight});
-        adj[e.v].push_back({e.u, e.weight});
-    }
-    int secondbest=INT_MAX;
-
-    for(int i=0; i<E; i++){
-        if(used[i]){
+        if(visited[node]){
             continue;
         }
-        int maxEdge=-1;
-        dfs(edge[i].u, edge[i].v,-1,adj,maxEdge);
-        int newcost=totalcost+edge[i].weight-maxEdge;
-        if(newcost>totalcost){
-            secondbest=min(secondbest,newcost);
+
+        visited[node]=true;
+        totalcost+=weight;
+
+        if(parent!=-1){
+            cout<<parent<<"-"<<node<<":"<<weight<<"\n";
+        }
+
+        for(auto neighbor : adj[node]){
+            int next=neighbor.first;
+            int w=neighbor.second;
+
+            if(!visited[next]){
+                pq.push({w,next,node});
+            }
         }
     }
-
     cout<<totalcost<<"\n";
-    if(secondbest==INT_MAX){
-        cout<<"no\n";
-
-    }
-    else{
-        cout<<secondbest<<"\n";
-    }
-
     return 0;
-    
-
 }
